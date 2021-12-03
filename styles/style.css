@@ -1,0 +1,26 @@
+#logo{
+    width: 15%;
+    max-width: 110px;
+}
+body{
+    background-color: #00A548;
+}
+.modal-header{
+    background-color: #d6d6d6;
+}
+.modal-body{
+    background-color: #ffffff;
+}
+.modal-footer{
+    background-color: #d6d6d6;
+}
+.container-sm{
+    padding-top: 30px;
+}
+a{
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+    color: white;
+}
