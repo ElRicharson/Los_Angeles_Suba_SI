@@ -10,13 +10,7 @@ $conn = new mysqli($servername, $username, $password);
 if ($conn->connect_error) {
   die("Ha ocurrido un error de conexión con la base de datos: " . $conn->connect_error);
 }
-$sql = "CREATE DATABASE if not exists sistema";
-if ($conn->query($sql) === TRUE) {
-  echo "";
-} else {
-  echo "Error creating database: " . $conn->error;
-}
-mysqli_select_db($conn,"sistema");
+mysqli_select_db($conn,"heroku_73ae08ece5ae102");
 $sql2 = "CREATE TABLE IF NOT EXISTS USUARIOS
 (
   ID INT AUTO_INCREMENT PRIMARY KEY UNIQUE,
