@@ -8,7 +8,7 @@ $conn = new mysqli($servername, $username, $password);
 
 // Check connection
 if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+  die("Ha ocurrido un error de conexión con la base de datos: " . $conn->connect_error);
 }
 $sql = "CREATE DATABASE sistema";
 if ($conn->query($sql) === TRUE) {
