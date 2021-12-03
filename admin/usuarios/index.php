@@ -60,17 +60,30 @@
             <div class="card-body">
                 <table class="table table-success table-striped table-hover">
                     <tr>
-                        <th>Nombre</th>
-                        <th>Documento</th>
+                        <th>ID</th>
+                        <th>NOMBRE</th>
+                        <th>NOMBRE DE USUARIO</th>
                     </tr>
-                    <tr>
-                        <td>Nombre</td>
-                        <td>Documento</td>
-                    </tr>
-                    <tr>
-                        <td>Nombre</td>
-                        <td>Documento</td>
-                    </tr>
+                    <?php
+                        include"../../connection.php";
+                        
+                        $sql = "SELECT ID, NOMBRE, USERNAME FROM USUARIOS";
+                        $result = $conn->query($sql);
+                        
+                        if ($result->num_rows > 0) {
+                          // output data of each row
+                          while($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $row['ID'] . "</td>";
+                            echo "<td>" . $row['NOMBRE'] . "</td>";
+                            echo "<td>" . $row['USERNAME'] . "</td>";
+                            echo "</tr>";
+                          }
+                        } else {
+                          echo "0 results";
+                        }
+                        $conn->close();
+                        ?>
                 </table>
             </div>
         </div>

@@ -10,13 +10,14 @@ $conn = new mysqli($servername, $username, $password);
 if ($conn->connect_error) {
   die("Ha ocurrido un error de conexión con la base de datos: " . $conn->connect_error);
 }
-$sql = "CREATE DATABASE sistema";
+$sql = "CREATE DATABASE if not exists sistema";
 if ($conn->query($sql) === TRUE) {
-  echo "Database created successfully";
+  echo "";
 } else {
   echo "Error creating database: " . $conn->error;
 }
-$sql2 = "CREATE TABLE USUARIOS
+mysqli_select_db($conn,"sistema");
+$sql2 = "CREATE TABLE IF NOT EXISTS USUARIOS
 (
   ID INT AUTO_INCREMENT PRIMARY KEY UNIQUE,
   NOMBRE VARCHAR(300) NOT NULL,
@@ -25,9 +26,8 @@ $sql2 = "CREATE TABLE USUARIOS
   )";
   
   if ($conn->query($sql2) === TRUE) {
-    echo "Table MyGuests created successfully";
+    echo "";
   } else {
     echo "Error creating table: " . $conn->error;
   }
-mysqli_select_db($conn,"sistema");
 ?>
