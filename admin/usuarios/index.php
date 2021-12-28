@@ -72,6 +72,8 @@
                         <th>ID</th>
                         <th>NOMBRE</th>
                         <th>NOMBRE DE USUARIO</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     <?php
                         include"../../connection.php";
@@ -86,6 +88,8 @@
                             echo "<td>" . $row['ID'] . "</td>";
                             echo "<td>" . $row['NOMBRE'] . "</td>";
                             echo "<td>" . $row['USERNAME'] . "</td>";
+                            echo "<td>".'<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Editar</button>'."</td>";
+                            echo "<td>".'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>'."</td>";
                             echo "</tr>";
                           }
                         } else {

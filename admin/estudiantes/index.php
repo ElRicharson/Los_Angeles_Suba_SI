@@ -47,29 +47,238 @@
     <div class="container-sm">
         <div class="card">
             <div class="card-header">
-                Estudiantes registrados
+                Listado de Estudiantes
             </div>
             <div class="container-sm">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Buscar usuarios" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Buscar</button>
-                </form>
+                <div class="row">
+                    <div class="col-md-9">
+                        <input class="form-control me-2" type="search" placeholder="Buscar Estudiantes"
+                            aria-label="Search">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#login">Agregar
+                            Estudiante</button>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table table-success table-striped table-hover">
                     <tr>
                         <th>ID</th>
-                        <th>NOMBRE</th>
-                        <th>USUARIO</th>
+                        <th>Nombre</th>
+                        <th>Grado</th>
+                        <th>Mora</th>
+                        <th>Matriculado</th>
+                        <th></th>
+                        <th></th>
                     </tr>
-                    
-                </table>
+                    <?php
+                        include"../../connection.php";
+                        
+                        $sql = "
+                        SELECT
+                            ID,
+                            CONCAT(
+                                PNOMBRE,' ',
+                                SNOMBRE,' ',
+                                PAPELLIDO,' ',
+                                SAPELLIDO) AS NOMBRE,
+                            GRADO,
+                            CASE WHEN MORA=1 THEN 'SI' ELSE 'NO' END AS ENMORA,
+                            CASE WHEN MATRICULADO=1 THEN 'SI' ELSE 'NO' END AS ESMATRICULADO
+                        FROM ESTUDIANTES";
+                        $result = $conn->query($sql);
+                        
+                        if ($result->num_rows > 0) {
+                          // output data of each row
+                          while($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>".$row['ID']."</td>";
+                            echo "<td>".$row['NOMBRE']."</td>";
+                            echo "<td>".$row['GRADO']."</td>";
+                            echo "<td>".$row['ENMORA']."</td>";
+                            echo "<td>".$row['ESMATRICULADO']."</td>";
+                            echo "<td>".'
+                            <form method="POST">
+                            <input type="hidden" name="IDUSED" value="'.$row['ID'].'">
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Editar</button>
+                            </form>
+                            '
+                            ."</td>";
 
+                            echo "<td>".'
+                            <form method="POST">
+                            <input type="hidden" name="IDDEL" value="'.$row['ID'].'">
+                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+                            </form>
+                            '
+                            ."</td>";
+                            echo "</tr>";
+                          }
+                        } else {
+                          echo "0 Estudiantes Registrados";
+                        }
+                        $conn->close();
+                        ?>
+                </table>
             </div>
         </div>
     </div>
 
 
+    <!-- Modals -->
+    <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear nuevo Estudiante</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <!--PNOMBRE-->
+                        <div class="mb-3">
+                            <label class="form-label">Primer Nombre</label>
+                            <input name="PNOMBRE" class="form-control">
+                        </div>
+                        <!--SNOMBRE-->
+                        <div class="mb-3">
+                            <label class="form-label">Segundo Nombre</label>
+                            <input name="SNOMBRE" class="form-control">
+                        </div>
+                        <!--PAPELLIDO-->
+                        <div class="mb-3">
+                            <label class="form-label">Primer Apellido</label>
+                            <input name="PAPELLIDO" class="form-control">
+                        </div>
+                        <!--SAPELLIDO-->
+                        <div class="mb-3">
+                            <label class="form-label">Segundo Apellido</label>
+                            <input name="SAPELLIDO" class="form-control">
+                        </div>
+                        <!--GRADO-->
+                        <div class="mb-3">
+                            <label class="form-label">Grado</label>
+                            <select id="cars" name="GRADO" class="form-control" id="GRADO">
+                                <option value="0">Grado 0 (cero)</option>
+                                <option value="1">Grado 1 (primero)</option>
+                                <option value="2">Grado 2 (segundo)</option>
+                                <option value="3">Grado 3 (tercero)</option>
+                                <option value="4">Grado 4 (cuarto)</option>
+                                <option value="5">Grado 5 (quinto)</option>
+                            </select>
+                        </div>
+                        <!--MORA-->
+                        <div class="mb-3 btn-group-lg">
+                            <input name="MORA" type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="btncheck2">Se encuentra en mora</label>
+                        </div>
+                        <!--MATRICULADO-->
+                        <div class="mb-3 btn-group-lg">
+                            <input name="MATRICULADO" type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="btncheck1">Está matriculado</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary btn-success">Aceptar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDITAR -->
+    <?php  
+    if (isset($_POST["IDUSED"])){
+        $IDUSED = $_POST["IDUSED"];
+        include"../../connection.php";
+        $sql = "SELECT ID,PNOMBRE,SNOMBRE,PAPELLIDO,SAPELLIDO,GRADO,MORA,MATRICULADO FROM ESTUDIANTES WHERE ID = $IDUSED";
+        $result = $conn->query($sql);
+        
+        if ($result->num_rows > 0) {
+          // output data of each row
+          while($rowe = $result->fetch_assoc()) {
+            echo '
+
+            <div class="modal fade show" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false" aria-modal="true" role="dialog" style="display: block; padding-left: 0px;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Editar Estudiante</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST">
+                        <div class="modal-body">
+                            <!--PNOMBRE-->
+                            <div class="mb-3">
+                                <label class="form-label">Primer Nombre</label>
+                                <input value="'.$rowe["PNOMBRE"].'" name="PNOMBRE" class="form-control">
+                            </div>
+                            <!--SNOMBRE-->
+                            <div class="mb-3">
+                                <label class="form-label">Segundo Nombre</label>
+                                <input value="'.$rowe["SNOMBRE"].'" name="SNOMBRE" class="form-control">
+                            </div>
+                            <!--PAPELLIDO-->
+                            <div class="mb-3">
+                                <label class="form-label">Primer Apellido</label>
+                                <input value="'.$rowe["PAPELLIDO"].'" name="PAPELLIDO" class="form-control">
+                            </div>
+                            <!--SAPELLIDO-->
+                            <div class="mb-3">
+                                <label class="form-label">Segundo Apellido</label>
+                                <input value="'.$rowe["SAPELLIDO"].'" name="SAPELLIDO" class="form-control">
+                            </div>
+                            <!--GRADO-->
+                            <div class="mb-3">
+                                <label class="form-label">Grado</label>
+                                <select id="cars" name="GRADO" class="form-control" id="GRADO">
+                                    <option value="6">NO SELECCIONADO</option>
+                                    <option value="0">Grado 0 (cero)</option>
+                                    <option value="1">Grado 1 (primero)</option>
+                                    <option value="2">Grado 2 (segundo)</option>
+                                    <option value="3">Grado 3 (tercero)</option>
+                                    <option value="4">Grado 4 (cuarto)</option>
+                                    <option value="5">Grado 5 (quinto)</option>
+                                </select>
+                            </div>
+                            <!--MORA-->
+                            <div class="mb-3 btn-group-lg">
+                                <input name="MORA" type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="btncheck2">Se encuentra en mora</label>
+                            </div>
+                            <!--MATRICULADO-->
+                            <div class="mb-3 btn-group-lg">
+                                <input name="MATRICULADO" type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="btncheck1">Está matriculado</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary btn-success">Aceptar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+            ';
+          }
+        } else {
+          echo "El estudiante que intenta editar ya no existe.";
+        }
+        $conn->close();
+    }
+    ?>
+    <!-- ELIMINAR -->
+    <?php
+                    if (isset($_POST["IDDEL"])){
+                        echo "eliminando: ".$_POST["IDDEL"];
+                    }
+    ?>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

@@ -47,29 +47,134 @@
     <div class="container-sm">
         <div class="card">
             <div class="card-header">
-                Pagos Registrados
+                Listado de pagos
             </div>
             <div class="container-sm">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Buscar usuarios" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Buscar</button>
-                </form>
+                <div class="row">
+                    <div class="col-md-9">
+                        <input class="form-control me-2" type="search" placeholder="Buscar pagos registrados"
+                            aria-label="Search">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#login">Agregar
+                            Registro</button>
+                    </div>
+                </div>
+                <?php
+                    include"new.php"
+                ?>
             </div>
             <div class="card-body">
                 <table class="table table-success table-striped table-hover">
                     <tr>
-                        <th>Nombre</th>
-                        <th>Documento</th>
+                        <th>ID</th>
+                        <th>MONTO</th>
+                        <th>ESTUDIANTE</th>
+                        <th>FECHA</th>
+                        <th></th>
+                        <th></th>
                     </tr>
-                    <tr>
-                        <td>Nombre</td>
-                        <td>Documento</td>
-                    </tr>
-                    <tr>
-                        <td>Nombre</td>
-                        <td>Documento</td>
-                    </tr>
+                    <?php
+                        include"../../connection.php";
+                        
+                        $sql = "SELECT
+                                    P.ID AS ID,
+                                    P.MONTO AS MONTO,
+                                    CONCAT(
+                                        P.ESTUDIANTE,' - ',
+                                        E.PNOMBRE,' ',
+                                        E.SNOMBRE,' ',
+                                        E.PAPELLIDO,' ',
+                                        E.SAPELLIDO) AS ESTUDIANTE,
+                                    P.FECHA AS FECHA
+                                FROM pagos P
+                                LEFT JOIN estudiantes E
+                                    ON P.ESTUDIANTE = E.ID";
+                        $result = $conn->query($sql);
+                           
+                        if ($result->num_rows > 0) {
+                          // output data of each row
+                          while($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $row['ID'] . "</td>";
+                            echo "<td>" . $row['MONTO'] . "</td>";
+                            echo "<td>" . $row['ESTUDIANTE'] . "</td>";
+                            echo "<td>" . $row['FECHA'] . "</td>";
+                            echo "<td>".'<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Editar</button>'."</td>";
+                            echo "<td>".'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>'."</td>";
+                            echo "</tr>";
+                          }
+                        } else {
+                          echo "0 Pagos registrados";
+                        }
+                        $conn->close();
+                        ?>
                 </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modals -->
+    <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registrar nuevo pago</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <!--MONTO-->
+                        <div class="mb-3">
+                            <label class="form-label">Monto</label>
+                            <input type="number" name="MONTO" class="form-control">
+                        </div>
+                        <!--ESTUDIANTE-->
+                        <div class="mb-3">
+                            <label class="form-label">Estudiante</label>
+                            <select name="ESTUDIANTE" class="form-control" id="GRADO">
+                            <?php
+                                include"../../connection.php";
+                                
+                                $sql = "
+                                SELECT
+                                    ID,
+                                    CONCAT(
+                                        PNOMBRE,' ',
+                                        SNOMBRE,' ',
+                                        PAPELLIDO,' ',
+                                        SAPELLIDO) AS NOMBRE,
+                                    GRADO,
+                                    CASE WHEN MORA=1 THEN 'SI' ELSE 'NO' END AS ENMORA,
+                                    CASE WHEN MATRICULADO=1 THEN 'SI' ELSE 'NO' END AS ESMATRICULADO
+                                FROM ESTUDIANTES";
+                                $result = $conn->query($sql);
+                                if ($result->num_rows > 0) {
+                                // output data of each row
+                                while($row = $result->fetch_assoc()) {
+                                echo '<option value="'.$row['ID'].'">'.$row['NOMBRE'].'</option>';
+                                }
+                                } else {
+                                echo "0 Estudiantes Registrados";
+                                }
+                                $conn->close();
+                            ?>
+                            </select>
+                        </div>
+                        <!--FECHA-->
+                        <div class="mb-3">
+                            <label class="form-label">Fecha</label>
+                            <input name="FECHA" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary btn-success">Aceptar
+                        </button>
+                    </div>
+                    
+                </form>
             </div>
         </div>
     </div>

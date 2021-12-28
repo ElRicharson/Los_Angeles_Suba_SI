@@ -1,10 +1,10 @@
 <?php
-$servername = "us-cdbr-east-04.cleardb.com";
-$username = "bab7b6d6b428e0";
-$password = "5e897f8a";
-//$servername = "localhost";
-//$username = "root";
-//$password = "";
+//$servername = "us-cdbr-east-04.cleardb.com";
+//$username = "bab7b6d6b428e0";
+//$password = "5e897f8a";
+$servername = "localhost";
+$username = "root";
+$password = "";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
@@ -13,8 +13,8 @@ $conn = new mysqli($servername, $username, $password);
 if ($conn->connect_error) {
   die("Ha ocurrido un error de conexión con la base de datos: " . $conn->connect_error);
 }
-//mysqli_select_db($conn,"SUBASI");
-mysqli_select_db($conn,"heroku_73ae08ece5ae102");
+mysqli_select_db($conn,"SUBASI");
+//mysqli_select_db($conn,"heroku_73ae08ece5ae102");
 
 #TABLA USUARIOS
 $sql = "CREATE TABLE IF NOT EXISTS USUARIOS

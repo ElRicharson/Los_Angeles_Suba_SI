@@ -37,6 +37,12 @@
             </div>
         </div>
     </nav>
+    <!-- BODY -->
+    <div class="container-sm">
+        <?php
+            include'validar.php'
+        ?>
+    </div>
     <!-- Modals -->
     <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -45,23 +51,21 @@
                     <h5 class="modal-title" id="exampleModalLabel">Iniciar sesión</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form>
+                <form method="POST">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Usuario</label>
-                            <input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <input name="USER" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                             <div id="emailHelp" class="form-text"></div>
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
+                            <input name="PASS" type="password" class="form-control" id="exampleInputPassword1">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button class="btn btn-primary btn-success"> <a href="admin">Aceptar
-                            </a>
-                        </button>
+                        <button type="submit" class="btn btn-primary btn-success">Aceptar</button>
                     </div>
                 </form>
             </div>
