@@ -60,7 +60,8 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         <button class="btn btn-primary btn-success"> <a href="admin">Aceptar
-                            </a></button>
+                            </a>
+                        </button>
                     </div>
                 </form>
             </div>

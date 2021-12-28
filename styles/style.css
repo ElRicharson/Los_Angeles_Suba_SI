@@ -1,10 +1,10 @@
-#logo{
-    width: 15%;
-    max-width: 110px;
-}
-body{
-    background-color: #00A548;
-}
+
+body {
+    background: #00a548;
+    background-image: url(../img/colegio.png), linear-gradient(#00a548, #003d1b);
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
 .modal-header{
     background-color: #d6d6d6;
 }
@@ -23,4 +23,8 @@ a{
 }
 a:hover{
     color: white;
+}
+#logo{
+    width: 15%;
+    max-width: 110px;
 }

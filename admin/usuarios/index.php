@@ -52,10 +52,19 @@
                 Listado de usuarios
             </div>
             <div class="container-sm">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Buscar usuarios" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Buscar</button>
-                </form>
+                <div class="row">
+                    <div class="col-md-9">
+                        <input class="form-control me-2" type="search" placeholder="Buscar usuarios"
+                            aria-label="Search">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#login">Agregar
+                            Registro</button>
+                    </div>
+                </div>
+                <?php
+                    include"new.php"
+                ?>
             </div>
             <div class="card-body">
                 <table class="table table-success table-striped table-hover">
@@ -80,7 +89,7 @@
                             echo "</tr>";
                           }
                         } else {
-                          echo "0 results";
+                          echo "0 Usuarios Registrados";
                         }
                         $conn->close();
                         ?>
@@ -90,7 +99,39 @@
     </div>
 
 
-
+    <!-- Modals -->
+    <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear nuevo usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre Completo</label>
+                            <input name="Nombre" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre Usuario</label>
+                            <input name="Usuario" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña</label>
+                            <input name="Contrasenia" type="password" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary btn-success">Aceptar
+                        </button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
