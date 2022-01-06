@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +10,6 @@
     <link rel="stylesheet" href="../../styles/style.css">
     <title>Estudiantes</title>
 </head>
-
 <body>
     <!--BOOTSTRAP NAVIGATION BAR-->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -52,17 +50,22 @@
             <div class="container-sm">
                 <div class="row">
                     <div class="col-md-9">
-                        <input class="form-control me-2" type="search" placeholder="Buscar Estudiantes"
-                            aria-label="Search">
+                        <form method="POST">
+                            <input name="QUERY" class="form-control me-2" type="search" placeholder="Buscar Estudiantes por nombre"
+                                aria-label="Search">
+                        </form>
                     </div>
                     <div class="col-md-3">
                         <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#login">Agregar
                             Estudiante</button>
                     </div>
                 </div>
+                <?php
+                    include"edit.php";
+                ?>
             </div>
-            <div class="card-body">
-                <table class="table table-success table-striped table-hover">
+            <div class="card-body ">
+                <table class="list-group list-group-horizontal text-nowrap overflow-auto table table-success table-striped table-hover">
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
@@ -72,9 +75,13 @@
                         <th></th>
                         <th></th>
                     </tr>
-                    <?php
+                    <?php 
+                        if(isset($_POST['QUERY'])){
+                            $QUERY = "'%".$_POST['QUERY']."%'";
+                        }else{
+                            $QUERY="'%%'";
+                        }
                         include"../../connection.php";
-                        
                         $sql = "
                         SELECT
                             ID,
@@ -86,7 +93,12 @@
                             GRADO,
                             CASE WHEN MORA=1 THEN 'SI' ELSE 'NO' END AS ENMORA,
                             CASE WHEN MATRICULADO=1 THEN 'SI' ELSE 'NO' END AS ESMATRICULADO
-                        FROM ESTUDIANTES";
+                        FROM ESTUDIANTES
+                        WHERE CONCAT(
+                            PNOMBRE,' ',
+                            SNOMBRE,' ',
+                            PAPELLIDO,' ',
+                            SAPELLIDO) LIKE $QUERY";
                         $result = $conn->query($sql);
                         
                         if ($result->num_rows > 0) {
@@ -105,7 +117,7 @@
                             </form>
                             '
                             ."</td>";
-
+    
                             echo "<td>".'
                             <form method="POST">
                             <input type="hidden" name="IDDEL" value="'.$row['ID'].'">
@@ -119,12 +131,12 @@
                           echo "0 Estudiantes Registrados";
                         }
                         $conn->close();
-                        ?>
+                        unset($refresh);
+                    ?>
                 </table>
             </div>
         </div>
     </div>
-
 
     <!-- Modals -->
     <div class="modal fade" id="login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -134,6 +146,9 @@
                     <h5 class="modal-title" id="exampleModalLabel">Crear nuevo Estudiante</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <?php
+                    include"new.php";
+                ?>
                 <form method="POST">
                     <div class="modal-body">
                         <!--PNOMBRE-->
@@ -168,22 +183,14 @@
                                 <option value="5">Grado 5 (quinto)</option>
                             </select>
                         </div>
-                        <!--MORA-->
-                        <div class="mb-3 btn-group-lg">
-                            <input name="MORA" type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="btncheck2">Se encuentra en mora</label>
-                        </div>
-                        <!--MATRICULADO-->
-                        <div class="mb-3 btn-group-lg">
-                            <input name="MATRICULADO" type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="btncheck1">Está matriculado</label>
-                        </div>
+                        <!--PARAMC-->
+                        <input name="PARAMC" type="hidden" value="true">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary btn-success">Aceptar
-                        </button>
+                        <button type="submit" class="btn btn-primary btn-success">Aceptar</button>
                     </div>
+                    <input name="REFRESH" type="hidden" value="true">
                 </form>
             </div>
         </div>
@@ -201,13 +208,11 @@
           // output data of each row
           while($rowe = $result->fetch_assoc()) {
             echo '
-
             <div class="modal fade show" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false" aria-modal="true" role="dialog" style="display: block; padding-left: 0px;">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Editar Estudiante</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="POST">
                         <div class="modal-body">
@@ -235,7 +240,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Grado</label>
                                 <select id="cars" name="GRADO" class="form-control" id="GRADO">
-                                    <option value="6">NO SELECCIONADO</option>
+                                    <option value="6">NO SELECCIONADO (NO CAMBIAR)</option>
                                     <option value="0">Grado 0 (cero)</option>
                                     <option value="1">Grado 1 (primero)</option>
                                     <option value="2">Grado 2 (segundo)</option>
@@ -244,22 +249,14 @@
                                     <option value="5">Grado 5 (quinto)</option>
                                 </select>
                             </div>
-                            <!--MORA-->
-                            <div class="mb-3 btn-group-lg">
-                                <input name="MORA" type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
-                                <label class="btn btn-outline-primary" for="btncheck2">Se encuentra en mora</label>
-                            </div>
-                            <!--MATRICULADO-->
-                            <div class="mb-3 btn-group-lg">
-                                <input name="MATRICULADO" type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
-                                <label class="btn btn-outline-primary" for="btncheck1">Está matriculado</label>
-                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary btn-success">Aceptar
                             </button>
                         </div>
+                        <input name="PARAME" type="hidden" value="true">
+                        <input name="REFRESH" type="hidden" value="true">
+                        <input type="hidden" value="'.$rowe["ID"].'" name="IDUSEDD">
                     </form>
                 </div>
             </div>
@@ -275,12 +272,14 @@
     ?>
     <!-- ELIMINAR -->
     <?php
-                    if (isset($_POST["IDDEL"])){
-                        echo "eliminando: ".$_POST["IDDEL"];
-                    }
+        if (isset($_POST["IDDEL"])){
+            $IDDEL = $_POST["IDDEL"];
+            include"../../connection.php";
+            $sql = "DELETE FROM ESTUDIANTES WHERE ID = $IDDEL"; 
+            $result = $conn->query($sql);
+            $refresh=true;
+        }
     ?>
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>

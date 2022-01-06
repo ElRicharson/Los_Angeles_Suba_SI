@@ -9,6 +9,7 @@ if (isset($_POST["USER"])){
 
     if ($result->num_rows>0) {
         header("Location: admin");
+        exit;
         die();
     } else {
         echo "INVALIDO";

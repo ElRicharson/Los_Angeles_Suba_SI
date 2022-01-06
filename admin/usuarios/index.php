@@ -96,7 +96,7 @@
                           echo "0 Usuarios Registrados";
                         }
                         $conn->close();
-                        ?>
+                    ?>
                 </table>
             </div>
         </div>
