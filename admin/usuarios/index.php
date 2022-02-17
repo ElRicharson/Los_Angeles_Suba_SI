@@ -40,7 +40,7 @@
                         <a class="nav-link active" href="#" aria-current="page">Manejo de usuarios</a>
                     </li>
                 </ul>
-                <a href="Los_Angeles_Suba_SI">
+                <a href="/">
                     <button class="btn btn-outline-success">Cerrar sesión</button>
                 </a>
             </div>
@@ -54,12 +54,14 @@
             <div class="container-sm">
                 <div class="row">
                     <div class="col-md-9">
-                        <input class="form-control me-2" type="search" placeholder="Buscar usuarios"
-                            aria-label="Search">
+                        <form method="POST">
+                            <input name="QUERY" class="form-control me-2" type="search" placeholder="Buscar Usuarios por nombre o nombre de usuario"
+                                aria-label="Search">
+                        </form>
                     </div>
                     <div class="col-md-3">
                         <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#login">Agregar
-                            Registro</button>
+                            Usuario</button>
                     </div>
                 </div>
                 <?php
@@ -76,9 +78,16 @@
                         <th></th>
                     </tr>
                     <?php
+                         if(isset($_POST['QUERY'])){
+                            $QUERY = "'%".$_POST['QUERY']."%'";
+                        }else{
+                            $QUERY="'%%'";
+                        }
                         include"../../connection.php";
                         
-                        $sql = "SELECT ID, NOMBRE, USERNAME FROM USUARIOS";
+                        $sql = "
+                        SELECT ID, NOMBRE, USERNAME FROM USUARIOS
+                        WHERE NOMBRE LIKE $QUERY OR USERNAME LIKE $QUERY";
                         $result = $conn->query($sql);
                         
                         if ($result->num_rows > 0) {
@@ -154,7 +163,7 @@
         if (isset($_POST["IDDEL"])){
             $IDDEL = $_POST["IDDEL"];
             include"../../connection.php";
-            $sql = "DELETE FROM ESTUDIANTES WHERE ID = $IDDEL"; 
+            $sql = "DELETE FROM USUARIOS WHERE ID = $IDDEL"; 
             $result = $conn->query($sql);
             $refresh=true;
         }

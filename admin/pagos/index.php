@@ -38,7 +38,7 @@
                         <a class="nav-link" href="../usuarios">Manejo de usuarios</a>
                     </li>
                 </ul>
-                <a href="Los_Angeles_Suba_SI">
+                <a href="/">
                     <button class="btn btn-outline-success">Cerrar sesión</button>
                 </a>
             </div>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="col-md-3">
                         <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#login">Agregar
-                            Estudiante</button>
+                            Pago</button>
                     </div>
                 </div>
                 <?php
