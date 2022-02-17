@@ -117,7 +117,7 @@
                             echo "<td>".'
                             <form method="POST">
                             <input type="hidden" name="IDUSED" value="'.$row['ID'].'">
-                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Editar</button>
+                            
                             </form>
                             '
                             ."</td>";

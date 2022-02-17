@@ -88,8 +88,21 @@
                             echo "<td>" . $row['ID'] . "</td>";
                             echo "<td>" . $row['NOMBRE'] . "</td>";
                             echo "<td>" . $row['USERNAME'] . "</td>";
-                            echo "<td>".'<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Editar</button>'."</td>";
-                            echo "<td>".'<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>'."</td>";
+                            echo "<td>".'
+                            <form method="POST">
+                            <input type="hidden" name="IDUSED" value="'.$row['ID'].'">
+                            
+                            </form>
+                            '
+                            ."</td>";
+    
+                            echo "<td>".'
+                            <form method="POST">
+                            <input type="hidden" name="IDDEL" value="'.$row['ID'].'">
+                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Eliminar</button>
+                            </form>
+                            '
+                            ."</td>";
                             echo "</tr>";
                           }
                         } else {
@@ -136,7 +149,16 @@
             </div>
         </div>
     </div>
-
+    <!-- ELIMINAR -->
+    <?php
+        if (isset($_POST["IDDEL"])){
+            $IDDEL = $_POST["IDDEL"];
+            include"../../connection.php";
+            $sql = "DELETE FROM ESTUDIANTES WHERE ID = $IDDEL"; 
+            $result = $conn->query($sql);
+            $refresh=true;
+        }
+    ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
