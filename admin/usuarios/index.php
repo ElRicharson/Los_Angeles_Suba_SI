@@ -40,7 +40,7 @@
                         <a class="nav-link active" href="#" aria-current="page">Manejo de usuarios</a>
                     </li>
                 </ul>
-                <a href="/Los_Angeles_Suba_SI">
+                <a href="Los_Angeles_Suba_SI">
                     <button class="btn btn-outline-success">Cerrar sesión</button>
                 </a>
             </div>
